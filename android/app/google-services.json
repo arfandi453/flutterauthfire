@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "668547710656",
+    "project_id": "otpphone-d70a1",
+    "storage_bucket": "otpphone-d70a1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:668547710656:android:81dde8790df39fe1a3f725",
+        "android_client_info": {
+          "package_name": "com.example.phone_otp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "668547710656-dn1pkodnhl8fmkk5e62j3e15ni25u6j4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.phone_otp",
+            "certificate_hash": "dd72fc48bede3b5095d019523df5cab00ac49030"
+          }
+        },
+        {
+          "client_id": "668547710656-ioc02fnm2qabe4kfmflg56cmgrjkf5fv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.phone_otp",
+            "certificate_hash": "d457a2e0a2cac62f2254c604e93fb1a974983a38"
+          }
+        },
+        {
+          "client_id": "668547710656-js57k29es8853at9ergomktvqlrij8b2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADjvwLfR2GxqawtY6mB24bSABfOp2GSsE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "668547710656-js57k29es8853at9ergomktvqlrij8b2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "668547710656-3bjuvhoj215hap92b0clcj05mnkcja4p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.phoneOtp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
