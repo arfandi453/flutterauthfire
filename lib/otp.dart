@@ -1,11 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:phone_otp/welcome.dart';
 
 class Otp extends StatefulWidget {
   const Otp({Key?key, required this.verificationId, required this.phoneNumber}) : super(key: key);
 
   final String verificationId;
   final String phoneNumber;
+
 
   @override
   State<Otp> createState() => _OtpState();
@@ -48,67 +51,75 @@ class _OtpState extends State<Otp> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      body: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 30),
-              Align(
-                alignment: Alignment.topLeft,
-                child: GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: const Icon(
-                    Icons.arrow_back_ios_outlined,
-                    size: 32,
-                    color: Colors.black54,
-                  ),
+      body: LayoutBuilder(
+        builder: (context, constraints)
+    {
+      final width = constraints.biggest.width;
+      final height = constraints.biggest.height;
+      return Container(
+        width: width,
+        height: height,
+        child: Column(
+          children: [
+            const SizedBox(height: 50),
+            Align(
+              alignment: Alignment.topLeft,
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: const Icon(
+                  Icons.arrow_back_ios_outlined,
+                  size: 32,
+                  color: Colors.black54,
                 ),
               ),
+            ),
 
-              const SizedBox(
-                height: 50,
+            const SizedBox(
+              height: 50,
+            ),
+
+
+            Container(
+              width: 200,
+              height: 200,
+              // decoration: BoxDecoration(
+              //   color: Colors.deepPurple.shade50,
+              //   shape: BoxShape.circle,
+              // ),
+              child: Image.asset(
+                'assets/vr.png',
               ),
+            ),
 
+            const SizedBox(
+              height: 28,
+            ),
 
-              Container(
-                width: 200,
-                height: 200,
+            Form(
+              key: _formKey,
+              child: Container(
+                padding: const EdgeInsets.all(28),
                 decoration: BoxDecoration(
-                  color: Colors.deepPurple.shade50,
-                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: Image.asset(
-                  'assets/images/illustration-3.png',
-                ),
-              ),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "No Hp tidak Boleh kosong!";
+                        }
 
-              const SizedBox(
-                height: 28,
-              ),
-
-              Form(
-                key: _formKey,
-                child: Container(
-                  padding: const EdgeInsets.all(28),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        keyboardType: TextInputType.number,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "No Hp tidak Boleh kosong!";
-                          }
-
-                          return null;
-                        },
-                        decoration: InputDecoration(
+                        return null;
+                      },
+                      decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                               borderSide: const BorderSide(color: Colors.black12),
                               borderRadius: BorderRadius.circular(10)),
@@ -116,80 +127,104 @@ class _OtpState extends State<Otp> {
                               borderSide: const BorderSide(color: Colors.black12),
                               borderRadius: BorderRadius.circular(10)
                           ),
-                        ),
-                        controller: otpNumber,
+                          hintText: "Masukkan OTP",
+                          hintStyle: TextStyle(color: Colors.grey[400])
                       ),
+                      controller: otpNumber,
+                    ),
 
-                      const SizedBox(height: 22),
+                    const SizedBox(height: 22),
 
-                      const Text(
-                        "Kode OTP berlaku dalam waktu 30 detik Ada Kendala OTP ? Hubungi Di Sini",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black38,
-                        ),
-                        textAlign: TextAlign.center,
+                    const Text(
+                      "Kode OTP berlaku dalam waktu 30 detik \n "
+                          "Ada Kendala OTP ? Hubungi Di Sini",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
                       ),
-                      const SizedBox(height: 40),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () async{
-                            if (_formKey.currentState!.validate()) {
-                              String smsCode = otpNumber.text.trim();
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 40),
+                    Container(
+                        width: 310,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            gradient: LinearGradient(
+                                colors: [
+                                  Color.fromRGBO(150, 149, 238, 1),
+                                  Color.fromRGBO(251, 199, 212, 1),
+                                ]
+                            )
+                        ),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () async{
+                              if (_formKey.currentState!.validate()) {
+                                String smsCode = otpNumber.text.trim();
+                                PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: widget.verificationId, smsCode: smsCode);
 
-                              PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: widget.verificationId, smsCode: smsCode);
-
-                              await auth.signInWithCredential(credential).then((value) => {
-                                Navigator.of(context).pop()
-                              });
-                            }
-                          },
-                          style: ButtonStyle(
-                            foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
-                            backgroundColor:
-                            MaterialStateProperty.all<Color>(Color.fromRGBO(
-                                107, 114, 245, 0.6),),
-                            shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24.0),
+                                await auth.signInWithCredential(credential).then((value) => {
+                                  Navigator.push(context,CupertinoPageRoute(builder: (context) => Welcome()))
+                                });
+                              }
+                            },
+                            style: ButtonStyle(
+                              backgroundColor:
+                              MaterialStateProperty.all<Color> (Color.fromRGBO(255, 255, 255, 0),),
+                              shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                              shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24.0),
+                                ),
+                              ),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.all(14.0),
+                              child: Text(
+                                'Verifikasi',
+                                style: TextStyle(fontSize: 16),
                               ),
                             ),
                           ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(14.0),
-                            child: Text(
-                              'Verifikasi',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                        )
+                    )
+                  ],
                 ),
               ),
+            ),
 
 
-              const SizedBox(
-                height: 18,
-              ),
-              TextButton(
-                onPressed: () async {
-                  _verifyPhone();
-
-                },
-                child: Text('Kirim Ulang Kode',
+            const SizedBox(
+              height: 18,
+            ),
+            FlatButton(
+              textColor: Colors.deepPurple.shade200,
+              child: Text(
+                'Kirim Ulang Kode',
                 style: TextStyle(
-                  color: Colors.deepPurpleAccent)),
+                    fontFamily: "Nunito",
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14),
               ),
-            ],
-          ),
+              onPressed: () async {
+                _verifyPhone();
 
-      ),
+              },
+            ),
+          ],
+        ),
+
+      );
+    }
+
+
+      )
+
     );
   }
 

@@ -32,17 +32,23 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Colors.deepPurpleAccent,
-      body: new Center(
-        child: new Container(
-          child: new Column(
+      body: Container(
+        width: 410,
+        height: 800,
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Color.fromRGBO(251, 199, 212, 1),
+                  Color.fromRGBO(150, 149, 238, 1),
+                  // Color.fromRGBO(251, 199, 212, 1),
+                ],
+              )
+          ),
+          child:  Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new Image.asset(
-                'assets/logo.png',
-                width: 200,
-                height: 200,
-              ),
               new Container(
                 padding: EdgeInsets.fromLTRB(0, 80, 0, 0),
                 child: new CircularProgressIndicator(
@@ -52,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ],
           ),
         ),
-      ),
+
     );
   }
 }

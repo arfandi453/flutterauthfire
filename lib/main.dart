@@ -1,9 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'dart:math';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:phone_otp/firebase_options.dart';
 import 'package:phone_otp/signup.dart';
 import 'package:phone_otp/splashscreen.dart';
+import 'package:sizer/sizer.dart';
 
 
 void main() async {
@@ -17,16 +21,18 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      color: Colors.purpleAccent,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
-    );
+    return Sizer(builder: (context , orientation, deviceType) {
+      return MaterialApp(
+        color: Colors.purpleAccent,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: SplashScreen(),
+      );
+    },);
   }
 }
 
@@ -36,187 +42,364 @@ class Landing extends StatefulWidget {
 }
 
 class _LandingState extends State<Landing> {
-  int _currentPage = 0;
-  PageController _controller = PageController();
-
-  List<Widget> _pages = [
-    SliderPage(
-      title: "Keep",
-      description:
-      "Accept cryptocurrencies and digital assets, keep thern here, or send to orthers",
-      lottie: "assets/order.json",
-    ),
-    SliderPage(
-      title: "Buy",
-      description:
-      "Buy Bitcoin and cryptocurrencies with VISA and MasterVard right in the App",
-      lottie: "assets/interaction.json"
-    ),
-    SliderPage(
-      title: "Sell",
-      description:
-      "Sell your Bitcoin cryptocurrencies or Change with orthres digital assets or flat money",
-      lottie: "assets/delivery.json"
-    ),
-  ];
-
-  _onchanged(int index) {
-    setState(() {
-      _currentPage = index;
-    });
-  }
+  int _currentIndex = 0;
+  final PageController _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfff7f6fb),
-      body: Stack(
-
-        children: <Widget>[
-          PageView.builder(
-            scrollDirection: Axis.horizontal,
-            onPageChanged: _onchanged,
-            controller: _controller,
-            itemCount: _pages.length,
-            itemBuilder: (context, int index) {
-              return _pages[index];
-            },
+      backgroundColor: Colors.black,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Container (
+            // padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 1.h),
+            padding: EdgeInsets.only(left: 30.0, right: 30.0),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(
+              gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+              Color.fromRGBO(251, 199, 212, 1),
+          Color.fromRGBO(150, 149, 238, 1),
+          // Color.fromRGBO(251, 199, 212, 1),
+          ],
+          )
           ),
 
-          Align(
-
-            alignment: Alignment.bottomLeft,
-
-            child: Row(
-              verticalDirection: VerticalDirection.down,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List<Widget>.generate(_pages.length, (int index) {
-                      return AnimatedContainer(
-                          duration: Duration(milliseconds: 300),
-                          height: 10,
-                          width: (index == _currentPage) ? 30 : 10,
-                          margin:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 30),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: (index == _currentPage)
-                                  ? Colors.deepPurpleAccent
-                                  : Colors.deepPurpleAccent.withOpacity(0.5)));
-                    })),
-                InkWell(
-                  onTap: () {
-                    _controller.jumpToPage(2);
-                    // duration: Duration(milliseconds: 800),
-                    // curve: Curves.easeInOutQuint);
-                  },
-                  child: AnimatedContainer(
-                      alignment: Alignment.center,
-                      duration: Duration(milliseconds: 300),
-                      height: 70,
-                      width: (_currentPage == (_pages.length - 1)) ? 200 : 100,
-                      decoration: BoxDecoration(
-                          color: (_currentPage == (_pages.length - 1)) ? Colors.white : Colors.white,
-                          borderRadius: (_currentPage == (_pages.length - 1)) ? BorderRadius.circular(0) : BorderRadius.circular(0)),
-                          child: (_currentPage == (_pages.length - 1))
-                  ? ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => SignUp()));
-                      },
-                      style: ButtonStyle(
-                        foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.white),
-                        backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.deepPurpleAccent),
-                        shape:
-                        MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24.0),
-                          ),
-                        ),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(14.0),
-                        child: Text(
-                          'Mulai',
-                          style: TextStyle(fontSize: 16),),
-                      ),
-                    )
-                          // ? TextButton(onPressed: () { Navigator.of(context).push(MaterialPageRoute(builder: (context) => SignUp())); }, child: Text("Mulai", style: TextStyle(color: Colors.white, fontSize: 20,))
-                          // )
-                          : Text(
-                        "skip",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                        ),
-                      )
-                  ),
-                ),
-                SizedBox(
-                  height: 50,
-                )
-              ],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: 80.0,),
+            Positioned(
+              child: Lottie.asset(
+                tabs[_currentIndex].lottieFile,
+                width: 600,
+                alignment: Alignment.topCenter,
+              ),
             ),
-          )
-        ],
+            Align(
+              // alignment: Alignment.bottomCenter,
+              child: SizedBox(
+              height: 270,
+              child: Column(
+              children: [
+              Flexible(
+              child: PageView.builder(
+              controller: _pageController,
+              itemCount: tabs.length,
+              itemBuilder: (BuildContext context, int index) {
+              OnboardingModel tab = tabs[index];
+              return Column(
+              children: [
+              Text(
+
+              tab.title,
+              style: const TextStyle(
+              fontSize: 19.0,
+              fontWeight: FontWeight.bold,
+                color: Colors.white
+              ),
+               textAlign: TextAlign.left
+                ,
+              ),
+              const SizedBox(height: 50),
+              Text(
+              tab.subtitle,
+              style: const TextStyle(
+              fontSize: 17.0,
+              color: Colors.white70,
+              ),
+              textAlign: TextAlign.left
+                ,
+              )
+              ],
+              );
+              },
+              onPageChanged: (value) {
+              _currentIndex = value;
+              setState(() {});
+              },
+              ),
+              ),
+
+
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Container(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                            children: [
+                              for (int index = 0; index < tabs.length; index++)
+                                _DotIndicator(isSelected: index == _currentIndex)
+                            ]
+                        ),
+
+                        _currentIndex < 2 ? TextButton(onPressed: () {
+                          _pageController.jumpToPage(2);
+                        }, child: Text("Skip", style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold , color: Colors.white),)) : ElevatedButton(onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => SignUp()));
+                        }, child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Mulai", style:  TextStyle(color: Color.fromRGBO(150, 149, 238, 1),)),
+                            SizedBox(
+                              width: 45,
+
+                            ),
+                            Icon( // <-- Icon
+                              Icons.arrow_forward_ios,
+                              color:  Color.fromRGBO(150, 149, 238, 1),
+                              size: 18.0,
+                            ),
+                          ],
+                        ),
+                        style:  ButtonStyle(
+                          backgroundColor:
+                          MaterialStateProperty.all<Color> (Color.fromRGBO(
+                              255, 255, 255, 1.0),),
+                          shadowColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                          shape:
+                          MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                        ),),
+                      ],
+                    ),
+                  )
+                ),
+              ],
+              ),
+              ),
+            ),
+          ],
+          ),
+
+          );
+        }
       ),
     );
   }
 }
 
-class SliderPage extends StatelessWidget {
-  SliderPage({required this.title, required this.description, required this.lottie});
+class ArcPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Path orangeArc = Path()
+      ..moveTo(0, 0)
+      ..lineTo(0, size.height - 170)
+      ..quadraticBezierTo(
+          size.width / 2, size.height, size.width, size.height - 170)
+      ..lineTo(size.width, size.height)
+      ..lineTo(size.width, 0)
+      ..close();
 
-  final String title;
-  final String description;
-  final String lottie;
+    canvas.drawPath(orangeArc, Paint()..color = Colors.orange);
 
+    Path whiteArc = Path()
+      ..moveTo(0.0, 0.0)
+      ..lineTo(0.0, size.height - 185)
+      ..quadraticBezierTo(
+          size.width / 2, size.height - 70, size.width, size.height - 185)
+      ..lineTo(size.width, size.height)
+      ..lineTo(size.width, 0)
+      ..close();
 
+    canvas.drawPath(whiteArc, Paint()..color = Colors.white);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+class _DotIndicator extends StatelessWidget {
+  final bool isSelected;
+
+  const _DotIndicator({Key? key, required this.isSelected}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-
-    return Container(
-      color: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-           Lottie.asset(
-          lottie,
-           width: width * 0.6,
-           ),
-          SizedBox(
-            height: 60,
-          ),
-          Text(
-            title,
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 80),
-            child: Text(
-              description,
-              style: TextStyle(
-                height: 1.5,
-                fontWeight: FontWeight.normal,
-                fontSize: 14,
-                letterSpacing: 0.7,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          SizedBox(
-            height: 60,
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(right: 6.0),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        height: 10.0,
+        width: 10.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: isSelected ?Color.fromRGBO(240, 191, 220, 1) : Colors.white,
+        ),
       ),
     );
   }
 }
+
+class OnboardingModel {
+  final String lottieFile;
+  final String title;
+  final String subtitle;
+
+  OnboardingModel(this.lottieFile, this.title, this.subtitle);
+}
+
+List<OnboardingModel> tabs = [
+  OnboardingModel(
+    'assets/lottie1.json',
+    'Selamat Datang Di Aplikasi AyoCerita!',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut laboreet dolore magna aliqua',
+  ),
+  OnboardingModel(
+    'assets/interaction.json',
+    'Bagikan Cerita Kamu Dengan Sesama Melalui UpCerita',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut laboreet dolore magna aliqua',
+  ),
+  OnboardingModel(
+    'assets/mentaltherapy.json',
+    'Atau Ceritakan Masalahmu Bersama Konselor Profesional Kami',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut laboreet dolore magna aliqua.',
+  ),
+];
+//   int _currentPage = 0;
+//   PageController _controller = PageController();
+//
+//   List<Widget> _pages = [
+//     SliderPage(
+//       title: "Selamat Datang Di Aplikasi AyoCerita!",
+//       description:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut laboreet dolore magna aliqua.",
+//       lottie: "assets/lottie1.json",
+//     ),
+//     SliderPage(
+//       title: "Bagikan Cerita Kamu Dengan Sesama Melalui UpCerita",
+//       description:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut laboreet dolore magna aliqua.",
+//       lottie: "assets/interaction.json"
+//     ),
+//     SliderPage(
+//       title: "Atau Ceritakan Masalahmu Bersama Konselor Profesional Kami",
+//       description:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut laboreet dolore magna aliqua.",
+//       lottie: "assets/mentaltherapy.json"
+//     ),
+//   ];
+//
+//   _onchanged(int index) {
+//     setState(() {
+//       _currentPage = index;
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: LayoutBuilder(
+//         builder: (context, constraints) {
+//           final width = constraints.biggest.width;
+//           final height = constraints.biggest.height;
+//
+//           return Column(
+//             children: <Widget>[
+//               Container(
+//                 height: height,
+//                 // color: Colors.red,
+//                 decoration: BoxDecoration(
+//                     gradient: LinearGradient(
+//                       begin: Alignment.topRight,
+//                       end: Alignment.bottomLeft,
+//                       colors: [
+//                         Colors.blue,
+//                         Colors.red,
+//                       ],
+//                     )
+//                 ),
+//                 child: Column(
+//                   mainAxisAlignment: MainAxisAlignment.center,
+//                   children: [
+//                     Center(
+//                       child: Text('hello world! $width $height'),
+//                     )
+//                   ],
+//                 ),
+//               )
+//             ],
+//           );
+//         },
+//       )
+//     );
+//   }
+// }
+//
+// class SliderPage extends StatelessWidget {
+//   SliderPage(
+//       {required this.title, required this.description, required this.lottie});
+//
+//   final String title;
+//   final String description;
+//   final String lottie;
+//
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     double width = MediaQuery
+//         .of(context)
+//         .size
+//         .width;
+//     double height = MediaQuery
+//         .of(context)
+//         .size
+//         .height;
+//
+//     return Container(
+//       color: Colors.white,
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: <Widget>[
+//           Lottie.asset(
+//             lottie,
+//             width: 500,
+//             height: 300,
+//           ),
+//           SizedBox(
+//             height: 60,
+//           ),
+//           Text(
+//             title,
+//             style: TextStyle(fontFamily: "Nunito",
+//                 fontSize: 15,
+//                 fontWeight: FontWeight.bold),
+//             textAlign: TextAlign.left,
+//           ),
+//           SizedBox(
+//             height: 20,
+//           ),
+//           Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: 30),
+//             child: Text(
+//               description,
+//               style: TextStyle(
+//                 height: 1.5,
+//                 fontWeight: FontWeight.normal,
+//                 fontSize: 14,
+//                 letterSpacing: 0.7,
+//               ),
+//               textAlign: TextAlign.left,
+//             ),
+//           ),
+//           SizedBox(
+//             height: 60,
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
